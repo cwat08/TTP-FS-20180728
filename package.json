@@ -1,7 +1,7 @@
 {
-  "name": "boilermaker",
+  "name": "stockist",
   "version": "1.0.0",
-  "description": "Some boilerplate code to get you started - get shakin'!",
+  "description": "An app to view your stocks!",
   "engines": {
     "node": ">= 7.0.0"
   },
