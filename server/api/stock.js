@@ -55,7 +55,7 @@ router.post('/buy', async (req, res, next) => {
     const quantity = req.body.quantity
     const symbol = data.symbol
     const company = data.companyName
-
+    const openingPrice = data.open
     let stock = await Stock.findOne({where: {ticker: symbol}})
     if (!stock) {
       stock = await Stock.create({ticker: symbol})
@@ -63,11 +63,21 @@ router.post('/buy', async (req, res, next) => {
     const user = await User.findById(userId)
     const newTransaction = await Transaction.create({
       shareQuantity: quantity,
-      price: currentPrice,
+      price: currentPrice || openingPrice,
       transactionType: 'buy',
       stockId: stock.id
     })
     await user.addTransaction(newTransaction)
+
+    const transactionTotal = quantity * (currentPrice || openingPrice)
+    const newAccountTotal = user.accountTotal - transactionTotal
+    //have to subtract transaction amount from user accountTotal
+    console.log('PIE')
+    console.log(transactionTotal)
+
+    await user.update({
+      accountTotal: newAccountTotal
+    })
     res.send(newTransaction)
   } catch (err) {
     console.log(err.message)
