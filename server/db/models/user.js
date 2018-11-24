@@ -31,7 +31,7 @@ const User = db.define('user', {
     type: Sequelize.STRING
   },
   accountTotal: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.DECIMAL(10, 2),
     allowNull: false,
     defaultValue: 5000
   }

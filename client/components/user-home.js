@@ -6,11 +6,12 @@ import {connect} from 'react-redux'
  * COMPONENT
  */
 export const UserHome = props => {
-  const {name} = props
+  const {name, accountTotal} = props
 
   return (
     <div>
       <h3>Welcome, {name}!</h3>
+      <h5>Current Account Balance: ${accountTotal.toLocaleString('en')}</h5>
     </div>
   )
 }
@@ -20,7 +21,8 @@ export const UserHome = props => {
  */
 const mapState = state => {
   return {
-    name: state.user.name
+    name: state.user.name,
+    accountTotal: state.user.accountTotal
   }
 }
 
