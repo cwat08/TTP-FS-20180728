@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {buyStock} from '../store/stock'
 import {connect} from 'react-redux'
+import {me} from '../store/user'
 class TradeForm extends Component {
   constructor() {
     super()
@@ -24,7 +25,7 @@ class TradeForm extends Component {
       quantity: this.state.quantity,
       userId: this.props.user.id
     })
-    await this
+    await this.props.me()
     this.setState({hasSubmitted: true, stock: this.props.stock})
   }
   //add virtual column in transaction for symbol name??
@@ -57,7 +58,8 @@ const mapState = state => ({
 })
 const mapDispatch = dispatch => {
   return {
-    buyStock: stock => dispatch(buyStock(stock))
+    buyStock: stock => dispatch(buyStock(stock)),
+    me: () => dispatch(me())
   }
 }
 
