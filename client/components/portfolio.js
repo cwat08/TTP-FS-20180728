@@ -16,7 +16,7 @@ class Portfolio extends Component {
         {this.props.portfolio.map(portfolio => {
           return (
             <h4 key={portfolio.id}>
-              {portfolio.stock.ticker} - {portfolio.quantity} - $
+              {portfolio.stock.ticker} - {portfolio.quantity} - $NA
             </h4>
           )
         })}
