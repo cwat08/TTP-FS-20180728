@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const axios = require('axios')
-const {Transaction, Stock, User} = require('../db/models')
+const {Transaction, Stock, User, Portfolio} = require('../db/models')
 
 module.exports = router
 
@@ -11,6 +11,28 @@ router.get('/transactions/:id', async (req, res, next) => {
       include: [{model: Stock}]
     })
     res.send(transactions)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/portfolio/:id', async (req, res, next) => {
+  try {
+    const portfolio = await Portfolio.findAll({
+      where: {userId: req.params.id},
+      include: [{model: Stock}]
+    })
+    // const currPriceAdded = await portfolio.map(async stock => {
+    //   const res = await axios.get(
+    //     `https://api.iextrading.com/1.0/stock/${stock.stock.ticker}/quote`
+    //   )
+    //   const currentPrice = res.data.iexRealtimePrice
+    //   stock[currentPrice] = currentPrice
+    //   //console.log(stock)
+    //   return stock
+    // })
+
+    res.send(portfolio)
   } catch (err) {
     next(err)
   }
@@ -70,7 +92,24 @@ router.post('/buy', async (req, res, next) => {
     })
 
     await user.addTransaction(newTransaction)
-
+    const portfolio = await Portfolio.findOne({
+      where: {
+        userId: user.id,
+        stockId: stock.id
+      }
+    })
+    if (!portfolio) {
+      const newPortfolio = await Portfolio.create({
+        quantity,
+        userId: user.id,
+        stockId: stock.id
+      })
+      // newPortfolio.setUser(user.id)
+      // newPortfolio.setStock(stock.id)
+    } else {
+      const newQuantity = +portfolio.quantity + +quantity
+      portfolio.update({quantity: newQuantity})
+    }
     const transactionTotal = quantity * (currentPrice || openingPrice)
     const newAccountTotal = user.accountTotal - transactionTotal
     //have to subtract transaction amount from user accountTotal
