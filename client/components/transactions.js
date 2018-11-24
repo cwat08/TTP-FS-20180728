@@ -21,7 +21,13 @@ class Transactions extends Component {
     return this.props.transactions && this.props.transactions.length ? (
       <div>
         {this.props.transactions.map(transaction => {
-          return <h4 key={transaction.id}>{transaction.id}</h4>
+          return (
+            <h4 key={transaction.id}>
+              {' '}
+              BUY ({transaction.stock.ticker}) - {transaction.shareQuantity}{' '}
+              Shares @ ${transaction.price}
+            </h4>
+          )
         })}
       </div>
     ) : null

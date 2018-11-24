@@ -7,7 +7,8 @@ module.exports = router
 router.get('/transactions/:id', async (req, res, next) => {
   try {
     const transactions = await Transaction.findAll({
-      where: {userId: req.params.id}
+      where: {userId: req.params.id},
+      include: [{model: Stock}]
     })
     res.send(transactions)
   } catch (err) {
@@ -67,18 +68,21 @@ router.post('/buy', async (req, res, next) => {
       transactionType: 'buy',
       stockId: stock.id
     })
+
     await user.addTransaction(newTransaction)
 
     const transactionTotal = quantity * (currentPrice || openingPrice)
     const newAccountTotal = user.accountTotal - transactionTotal
     //have to subtract transaction amount from user accountTotal
-    console.log('PIE')
-    console.log(transactionTotal)
-
+    const fullTransaction = await Transaction.findById(newTransaction.id, {
+      include: [{model: Stock}]
+    })
+    // console.log('PUPPPPPPPP')
+    // console.log(fullTransaction)
     await user.update({
       accountTotal: newAccountTotal
     })
-    res.send(newTransaction)
+    res.send(fullTransaction)
   } catch (err) {
     console.log(err.message)
   }
