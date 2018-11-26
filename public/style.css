@@ -19,3 +19,15 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.gray {
+  color: gray;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}

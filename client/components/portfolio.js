@@ -14,6 +14,7 @@ class Portfolio extends Component {
     }
     this.realTimePrices = this.realTimePrices.bind(this)
     this.fetchPrices = this.fetchPrices.bind(this)
+    this.getColor = this.getColor.bind(this)
   }
   async componentDidMount() {
     await this.props.fetchPortfolio(this.props.user.id)
@@ -24,6 +25,14 @@ class Portfolio extends Component {
     setInterval(() => {
       this.fetchPrices()
     }, 1000)
+  }
+
+  getColor(open, current) {
+    let color
+    if (open < current) color = 'green'
+    else if (open > current) color = 'red'
+    else color = 'gray'
+    return color
   }
   async fetchPrices() {
     const portfolio = this.props.portfolio
@@ -51,11 +60,13 @@ class Portfolio extends Component {
         <div>
           <h2>Portfolio: ${this.state.portfolioValue.toLocaleString('en')}</h2>
           {this.props.portfolio.map(portfolio => {
-            const currentPrice =
-              this.state.prices[portfolio.id].price * portfolio.quantity
+            const currentPrice = this.state.prices[portfolio.id].price
+            const totalPrice = currentPrice * portfolio.quantity
+            const openPrice = this.state.prices[portfolio.id].open
+            const color = this.getColor(openPrice, currentPrice)
             return (
-              <h4 key={portfolio.id}>
-                {portfolio.stock.ticker} - {portfolio.quantity} - ${currentPrice.toLocaleString(
+              <h4 key={portfolio.id} className={color}>
+                {portfolio.stock.ticker} - {portfolio.quantity} - ${totalPrice.toLocaleString(
                   'en'
                 )}
               </h4>
