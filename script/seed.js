@@ -1,7 +1,8 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+const {User, Stock} = require('../server/db/models')
+const axios = require('axios')
 
 async function seed() {
   await db.sync({force: true})
@@ -11,6 +12,16 @@ async function seed() {
     User.create({name: 'Cody', email: 'cody@email.com', password: '123'}),
     User.create({name: 'Murphy', email: 'murphy@email.com', password: '123'})
   ])
+  const results = await axios.get(
+    'https://api.iextrading.com/1.0/ref-data/symbols'
+  )
+
+  for (let i = 0; i < results.data.length; i++) {
+    await Stock.create({ticker: results.data[i].symbol})
+  }
+  // const stocks = await results.data.forEach(
+  //   async stock => await Stock.create({ticker: stock.symbol})
+  // )
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
