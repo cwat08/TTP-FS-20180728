@@ -126,13 +126,3 @@ router.post('/buy', async (req, res, next) => {
     console.log(err.message)
   }
 })
-
-//openPrice
-//curr Price
-// iexRealtimePrice
-
-//need a get all stocks
-//need a get all transactions - or is that the same??
-
-//post new stock
-//do i need a separate table for portfolio of user??

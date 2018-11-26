@@ -30,7 +30,9 @@ class Transactions extends Component {
           )
         })}
       </div>
-    ) : null
+    ) : (
+      <h3>You do not have any transactions yet.</h3>
+    )
   }
 }
 
