@@ -3,6 +3,7 @@ import {fetchPortfolio} from '../store/portfolio'
 import {connect} from 'react-redux'
 import axios from 'axios'
 import TradeForm from './trade-form'
+import PortfolioTable from './portfolio-table'
 
 //make new portfolio table
 //stock id & quantity = update each time user buys/sells
@@ -56,82 +57,18 @@ class Portfolio extends Component {
   }
 
   render() {
-    const keys = Object.keys(this.state.prices)
     return (
       <div>
         <h3 className="page-header">Welcome, {this.props.user.name}</h3>
         <hr />
-        {this.props.portfolio.length ? (
-          keys.length ? (
-            <div id="portfolio-page">
-              <div id="table-component">
-                <div className="portfolio-heading">
-                  <div className="portfolio-title">Portfolio:</div>
-                  <div className="portfolio-amount">
-                    ${this.state.portfolioValue.toLocaleString('en')}
-                  </div>
-                </div>
-                <div id="portfolio-content">
-                  <table id="portfolio-table">
-                    <tbody>
-                      <tr className="heading border">
-                        <td className="td-portfolio">Symbol</td>
-                        <td className="td-portfolio">% Change</td>
-                        <td className="td-portfolio">Price</td>
-                        <td className="td-long">Owned Shares</td>
-                        <td className="td-long">Total Value</td>
-                      </tr>
-                      {this.props.portfolio.map(portfolio => {
-                        const stockData = this.state.prices[portfolio.id]
-                        const currPrice = stockData.price
-                        const totalValue = currPrice * portfolio.quantity
-                        const company = stockData.company
-                        const percentChange = stockData.change * 100
-                        const color = this.getColor(percentChange)
-                        return (
-                          // <div>
-                          <tr key={portfolio.id} className="border">
-                            <td className="tickerBox td-portfolio">
-                              <tr className={`${color} symbol bold`}>
-                                {portfolio.stock.ticker}
-                              </tr>
-                              <tr className="companyName">{company}</tr>
-                            </td>
-                            <td className={`${color} td-portfolio`}>
-                              {percentChange.toFixed(2)}%
-                            </td>
-                            <td className={`${color} price bold td-portfolio`}>
-                              {currPrice.toFixed(2)}
-                            </td>
-                            <td className="bold td-long">
-                              {portfolio.quantity}
-                            </td>
-                            <td className={`${color} bold td-long`}>
-                              ${totalValue.toLocaleString('en')}
-                            </td>
-                          </tr>
-                        )
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div className="trade-form-component">
-                <div className="trading-heading ">
-                  <div className="portfolio-title ">Account Balance:</div>
-                  <div className="portfolio-amount">
-                    ${this.props.user.accountTotal.toLocaleString('en')}
-                  </div>
-                </div>
-                <TradeForm />
-              </div>
-            </div>
+        <div id="portfolio-page">
+          {this.props.portfolio.length ? (
+            <PortfolioTable />
           ) : (
-            <h3 className="loading">Loading...</h3>
-          )
-        ) : (
-          <h3>You do not have any stocks in your portfolio</h3>
-        )}
+            'You do not have any stocks in your portfolio.'
+          )}
+          <TradeForm />
+        </div>
       </div>
     )
   }

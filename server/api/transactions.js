@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const axios = require('axios')
-const {Transaction, Stock, User} = require('../db/models')
+const {Transaction, Stock, User, Portfolio} = require('../db/models')
 
 module.exports = router
 router.get('/:id', async (req, res, next) => {
@@ -55,24 +55,25 @@ router.post('/buy', async (req, res, next) => {
         userId: user.id,
         stockId: stock.id
       })
-      // newPortfolio.setUser(user.id)
-      // newPortfolio.setStock(stock.id)
+      newPortfolio.setUser(user.id)
+      newPortfolio.setStock(stock.id)
     } else {
       const newQuantity = +portfolio.quantity + +quantity
       portfolio.update({quantity: newQuantity})
     }
     const transactionTotal = quantity * (currentPrice || openingPrice)
     const newAccountTotal = user.accountTotal - transactionTotal
-    //have to subtract transaction amount from user accountTotal
     const fullTransaction = await Transaction.findById(newTransaction.id, {
       include: [{model: Stock}]
     })
-    // console.log('PUPPPPPPPP')
-    // console.log(fullTransaction)
     await user.update({
       accountTotal: newAccountTotal
     })
-    res.send(fullTransaction)
+    const newPortfolio = await Portfolio.findAll({
+      where: {userId: userId},
+      include: [{model: Stock}]
+    })
+    res.send(newPortfolio)
   } catch (err) {
     console.log(err.message)
   }

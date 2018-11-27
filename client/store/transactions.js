@@ -6,7 +6,7 @@ import history from '../history'
  */
 // const GET_STOCKS = 'GET_STOCKS'
 const LOAD_TRANSACTIONS = 'LOAD_TRANSACTIONS'
-const ADD_STOCK = 'ADD_STOCK'
+//const ADD_STOCK = 'ADD_STOCK'
 
 /**
  * INITIAL STATE
@@ -21,7 +21,7 @@ const loadTransactions = transactions => ({
   transactions
 })
 
-const addStock = stock => ({type: BUY_STOCK, stock})
+//const addStock = stock => ({type: ADD_STOCK, stock})
 
 /**
  * THUNK CREATORS
@@ -35,16 +35,16 @@ export const fetchTransactions = id => async dispatch => {
   }
 }
 
-export const buyStock = stock => async dispatch => {
-  try {
-    const res = await axios.post('/api/transactions/buy', {
-      ...stock
-    })
-    dispatch(addStock(res.data))
-  } catch (err) {
-    console.error(err.message)
-  }
-}
+// export const buyStock = stock => async dispatch => {
+//   try {
+//     const res = await axios.post('/api/transactions/buy', {
+//       ...stock
+//     })
+//     dispatch(addStock(res.data))
+//   } catch (err) {
+//     console.error(err.message)
+//   }
+// }
 /**
  * REDUCER
  */
@@ -52,8 +52,7 @@ export default function(state = defaultTransactions, action) {
   switch (action.type) {
     case LOAD_TRANSACTIONS:
       return action.transactions
-    case ADD_STOCK:
-      return [...state, action.stock]
+
     default:
       return state
   }

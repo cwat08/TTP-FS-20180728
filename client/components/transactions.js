@@ -5,15 +5,11 @@ import {connect} from 'react-redux'
 class Transactions extends Component {
   constructor() {
     super()
-    // this.state = {
-    //   transactions: []
-    // }
     this.convertDate = this.convertDate.bind(this)
   }
 
   async componentDidMount() {
     const transactions = await this.props.fetchTransactions(this.props.user.id)
-    //await this.setState({transactions})
   }
 
   convertDate(time) {
