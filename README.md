@@ -1,4 +1,4 @@
-## STOCKIST
+# STOCKIST
 
 An app to buy stock and track your portfolio's value.
 
