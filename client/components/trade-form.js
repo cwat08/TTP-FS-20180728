@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import {buyStock} from '../store/portfolio'
 import {checkTicker} from '../store/validate'
 import {connect} from 'react-redux'
-import {me} from '../store/user'
 import axios from 'axios'
+
 class TradeForm extends Component {
   constructor() {
     super()
@@ -88,7 +88,6 @@ class TradeForm extends Component {
         </div>
         <div id="trade-form-toggle">
           <div className="toggle active-toggle">BUY</div>
-          <div className="toggle notActive">SELL</div>
         </div>
         <div>
           <form onSubmit={this.handleSubmit}>
@@ -114,13 +113,6 @@ class TradeForm extends Component {
             {this.state.quantityError.length ? (
               <h4 className="error">{this.state.quantityError}</h4>
             ) : null}
-            <div id="stock-preview">
-              {/* add logic to only show preview on key up when both field are filled out AND valid*/}
-              <div className="portfolio-title  purchase-preview">
-                3 shares of FB @ 31.34:{' '}
-              </div>
-              <div className="portfolio-amount purchase-preview">$$$$$$$$</div>
-            </div>
             <button type="submit">Buy</button>
           </form>
         </div>
@@ -136,7 +128,6 @@ const mapState = state => ({
 const mapDispatch = dispatch => {
   return {
     buyStock: stock => dispatch(buyStock(stock)),
-    me: () => dispatch(me()),
     checkTicker: ticker => dispatch(checkTicker(ticker))
   }
 }

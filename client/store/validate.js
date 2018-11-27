@@ -3,7 +3,7 @@ import axios from 'axios'
 /**
  * ACTION TYPES
  */
-// const GET_STOCKS = 'GET_STOCKS'
+
 const VALID_TICKER = 'VALID_TICKER'
 
 /**

@@ -1,12 +1,10 @@
 import axios from 'axios'
-import history from '../history'
 
 /**
  * ACTION TYPES
  */
-// const GET_STOCKS = 'GET_STOCKS'
+
 const LOAD_TRANSACTIONS = 'LOAD_TRANSACTIONS'
-//const ADD_STOCK = 'ADD_STOCK'
 
 /**
  * INITIAL STATE
@@ -33,16 +31,6 @@ export const fetchTransactions = id => async dispatch => {
   }
 }
 
-// export const buyStock = stock => async dispatch => {
-//   try {
-//     const res = await axios.post('/api/transactions/buy', {
-//       ...stock
-//     })
-//     dispatch(addStock(res.data))
-//   } catch (err) {
-//     console.error(err.message)
-//   }
-// }
 /**
  * REDUCER
  */

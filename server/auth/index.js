@@ -33,9 +33,13 @@ router.post('/signup', async (req, res, next) => {
 })
 
 router.post('/logout', async (req, res) => {
-  await req.logout()
-  await req.session.destroy()
-  res.redirect('/')
+  try {
+    await req.logout()
+    await req.session.destroy()
+    res.redirect('/')
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 router.get('/me', (req, res) => {

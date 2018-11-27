@@ -29,7 +29,7 @@ class Routes extends Component {
             <Route path="/portfolio" component={Portfolio} />
           </Switch>
         )}
-        {/* Displays our Login component as a fallback */}
+        {/* Displays Login component as a fallback */}
         <Route component={Login} />
       </Switch>
     )
@@ -55,8 +55,6 @@ const mapDispatch = dispatch => {
   }
 }
 
-// The `withRouter` wrapper makes sure that updates are not blocked
-// when the url changes
 export default withRouter(connect(mapState, mapDispatch)(Routes))
 
 /**

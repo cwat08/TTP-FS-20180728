@@ -28,10 +28,12 @@ router.post('/buy', async (req, res, next) => {
     const currentPrice = data.iexRealtimePrice
     const quantity = req.body.quantity
     const symbol = data.symbol
-    const company = data.companyName
     const openingPrice = data.open
-    let stock = await Stock.findOne({where: {ticker: symbol}})
+
+    const stock = await Stock.findOne({where: {ticker: symbol}})
     const user = await User.findById(userId)
+
+    //create new transaction
     const newTransaction = await Transaction.create({
       shareQuantity: quantity,
       price: currentPrice || openingPrice,
@@ -46,6 +48,7 @@ router.post('/buy', async (req, res, next) => {
         stockId: stock.id
       }
     })
+    //create or update an existing portfolio
     if (!portfolio) {
       const newPortfolio = await Portfolio.create({
         quantity,
@@ -58,6 +61,7 @@ router.post('/buy', async (req, res, next) => {
       const newQuantity = +portfolio.quantity + +quantity
       portfolio.update({quantity: newQuantity})
     }
+    //update users account total to reflect stock purchase
     const transactionTotal = quantity * (currentPrice || openingPrice)
     const newAccountTotal = user.accountTotal - transactionTotal
     await user.update({

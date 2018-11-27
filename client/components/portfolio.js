@@ -5,8 +5,6 @@ import axios from 'axios'
 import TradeForm from './trade-form'
 import PortfolioTable from './portfolio-table'
 
-//make new portfolio table
-//stock id & quantity = update each time user buys/sells
 class Portfolio extends Component {
   constructor() {
     super()
@@ -63,7 +61,12 @@ class Portfolio extends Component {
         <hr />
         <div id="portfolio-page">
           {this.props.portfolio.length ? (
-            <PortfolioTable />
+            <PortfolioTable
+              portfolio={this.props.portfolio}
+              prices={this.state.prices}
+              portfolioValue={this.state.portfolioValue}
+              getColor={this.getColor}
+            />
           ) : (
             'You do not have any stocks in your portfolio.'
           )}

@@ -1,12 +1,10 @@
 /* eslint-env mocha, chai */
 
 const {expect} = require('chai')
-// const sinon = require('sinon')
 const supertest = require('supertest')
 const app = require('../index')
 const agent = supertest.agent(app)
 const {Portfolio, User, Transaction, Stock, db} = require('../db/models')
-const axios = require('axios')
 
 describe('Routes', () => {
   beforeEach(async () => {
