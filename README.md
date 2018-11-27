@@ -7,9 +7,6 @@ I really enjoyed this project and how it forced me to think about data and api d
 
 If I had more time, I would have like to be able to write more tests for full test coverage, implement a sell feature, so users could sell stocks as well, and create some sort of data visualization, so users could see how well their portfolio performs over time.
 
-## Deployed App
-You can find our deployed app at burst-acs.herokuapp.com
-
 ## Getting Started
 To run this app locally,
 1. npm install
