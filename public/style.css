@@ -298,3 +298,12 @@ hr {
 .error-border {
   border: 1px solid red;
 }
+
+.no-portfolio {
+  margin-top: 45px;
+}
+
+.no-transactions {
+  text-align: center;
+  margin-top: 85px;
+}

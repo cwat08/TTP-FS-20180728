@@ -47,7 +47,7 @@ class Transactions extends Component {
         </table>
       </div>
     ) : (
-      <h3>You do not have any transactions yet.</h3>
+      <h4 className="no-transactions">You do not have any transactions yet.</h4>
     )
   }
 }

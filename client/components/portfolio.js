@@ -68,7 +68,9 @@ class Portfolio extends Component {
               getColor={this.getColor}
             />
           ) : (
-            'You do not have any stocks in your portfolio.'
+            <h4 className="no-portfolio">
+              You do not have any stocks in your portfolio.
+            </h4>
           )}
           <TradeForm />
         </div>
