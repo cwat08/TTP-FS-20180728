@@ -102,7 +102,7 @@ button {
   border-radius: 5px;
   outline: 0;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 15px;
   border: 1px solid #0000ff;
   color: #0000ff;
 }
@@ -115,7 +115,7 @@ form {
   display: flex;
   flex-direction: column;
   background-color: #f1f2f6;
-  padding: 12px;
+  padding: 20px;
   border-radius: 5px;
 }
 
@@ -131,7 +131,7 @@ form {
   margin-left: 20px;
 }
 
-#trade-form {
+.trade-form-component {
   margin-right: 40px;
   display: flex;
   flex-direction: column;
@@ -187,14 +187,18 @@ form {
 }
 
 .portfolio-heading {
-  margin: 15px 0 15px 40px;
+  margin: 50px 0 30px 40px;
   display: flex;
   flex-direction: column;
-  width: 50vw;
 }
 
 .trading-heading {
   font-weight: bold;
+}
+
+.trade-form-component {
+  display: flex;
+  flex-direction: column;
 }
 
 .nav-items {
@@ -221,4 +225,49 @@ form {
 .loading {
   text-align: center;
   margin-top: 150px;
+}
+
+#table-component {
+  display: flex;
+  flex-direction: column;
+}
+
+#portfolio-page {
+  display: flex;
+  justify-content: space-around;
+}
+
+.trading-heading {
+  display: flex;
+  flex-direction: column;
+  margin: 50px 40px 30px 0;
+}
+
+#stock-preview {
+  background-color: #f9f9fb;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 5px;
+}
+
+.purchase-preview {
+  padding: 5px;
+  margin: 0;
+}
+
+#auth-form {
+  width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+}
+
+#auth-form form {
+  padding: 15px 15px 15px 15px;
+}
+
+.auth-title {
+  text-align: center;
+  padding-top: 0;
 }

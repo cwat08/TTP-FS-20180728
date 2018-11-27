@@ -61,60 +61,62 @@ class Portfolio extends Component {
     return this.props.portfolio.length ? (
       keys.length ? (
         <div id="portfolio-page">
-          <div className="portfolio-heading">
-            <div className="portfolio-title">Portfolio:</div>
-            <div className="portfolio-amount">
-              ${this.state.portfolioValue.toLocaleString('en')}
+          <div id="table-component">
+            <div className="portfolio-heading">
+              <div className="portfolio-title">Portfolio:</div>
+              <div className="portfolio-amount">
+                ${this.state.portfolioValue.toLocaleString('en')}
+              </div>
+            </div>
+            <div id="portfolio-content">
+              <table id="portfolio-table">
+                <tbody>
+                  <tr id="heading" className="border">
+                    <td className="td-portfolio">Symbol</td>
+                    <td className="td-portfolio">% Change</td>
+                    <td className="td-portfolio">Price</td>
+                    <td className="td-long">Owned Shares</td>
+                    <td className="td-long">Total Value</td>
+                  </tr>
+                  {this.props.portfolio.map(portfolio => {
+                    const stockData = this.state.prices[portfolio.id]
+                    const currPrice = stockData.price
+                    const totalValue = currPrice * portfolio.quantity
+                    const company = stockData.company
+                    const percentChange = stockData.change * 100
+                    const color = this.getColor(percentChange)
+                    return (
+                      // <div>
+                      <tr key={portfolio.id} className="border">
+                        <td className="tickerBox td-portfolio">
+                          <tr className="symbol bold">
+                            {portfolio.stock.ticker}
+                          </tr>
+                          <tr className="companyName">{company}</tr>
+                        </td>
+                        <td className={`${color} td-portfolio`}>
+                          {percentChange}%
+                        </td>
+                        <td className="price bold td-portfolio">{currPrice}</td>
+                        <td className="bold td-long">{portfolio.quantity}</td>
+                        <td className="bold td-long">
+                          ${totalValue.toLocaleString('en')}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
-          <div id="portfolio-content">
-            <table id="portfolio-table">
-              <tbody>
-                <tr id="heading" className="border">
-                  <td className="td-portfolio">Symbol</td>
-                  <td className="td-portfolio">% Change</td>
-                  <td className="td-portfolio">Price</td>
-                  <td className="td-long">Owned Shares</td>
-                  <td className="td-long">Total Value</td>
-                </tr>
-                {this.props.portfolio.map(portfolio => {
-                  const stockData = this.state.prices[portfolio.id]
-                  const currPrice = stockData.price
-                  const totalValue = currPrice * portfolio.quantity
-                  const company = stockData.company
-                  const percentChange = stockData.change * 100
-                  const color = this.getColor(percentChange)
-                  return (
-                    // <div>
-                    <tr key={portfolio.id} className="border">
-                      <td className="tickerBox td-portfolio">
-                        <tr className="symbol bold">
-                          {portfolio.stock.ticker}
-                        </tr>
-                        <tr className="companyName">{company}</tr>
-                      </td>
-                      <td className={`${color} td-portfolio`}>
-                        {percentChange}%
-                      </td>
-                      <td className="price bold td-portfolio">{currPrice}</td>
-                      <td className="bold td-long">{portfolio.quantity}</td>
-                      <td className="bold td-long">
-                        ${totalValue.toLocaleString('en')}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-            <div className="trade-form-component">
-              <div className="trading ">
-                <div className="portfolio-title ">Trading:</div>
-                <div className="portfolio-amount">
-                  ${this.props.user.accountTotal.toLocaleString('en')}
-                </div>
+          <div className="trade-form-component">
+            <div className="trading-heading ">
+              <div className="portfolio-title ">Trading:</div>
+              <div className="portfolio-amount">
+                ${this.props.user.accountTotal.toLocaleString('en')}
               </div>
-              <TradeForm />
             </div>
+            <TradeForm />
           </div>
         </div>
       ) : (

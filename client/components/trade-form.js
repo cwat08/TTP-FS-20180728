@@ -81,6 +81,14 @@ class TradeForm extends Component {
             {this.state.quantityError.length ? (
               <h4>{this.state.quantityError}</h4>
             ) : null}
+
+            <div id="stock-preview">
+              {/* add logic to only show preview on key up when both field are filled out AND valid*/}
+              <div className="portfolio-title  purchase-preview">
+                3 shares of FB @ 31.34:{' '}
+              </div>
+              <div className="portfolio-amount purchase-preview">$$$$$$$$</div>
+            </div>
             <button type="submit">Buy</button>
           </form>
         </div>
