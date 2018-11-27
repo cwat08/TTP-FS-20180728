@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {fetchPortfolio} from '../store/portfolio'
 import {connect} from 'react-redux'
 import axios from 'axios'
+import TradeForm from './trade-form'
 
 //make new portfolio table
 //stock id & quantity = update each time user buys/sells
@@ -27,10 +28,10 @@ class Portfolio extends Component {
     }, 1000)
   }
 
-  getColor(open, current) {
+  getColor(change) {
     let color
-    if (open < current) color = 'green'
-    else if (open > current) color = 'red'
+    if (change > 0) color = 'green'
+    else if (change < 0) color = 'red'
     else color = 'gray'
     return color
   }
@@ -45,9 +46,11 @@ class Portfolio extends Component {
       )
       const data = res.data
       const open = data.open
-      const price = data.iexRealtimePrice
+      const price = data.latestPrice
+      const company = data.companyName
+      const change = data.changePercent
       const quantity = portfolio[i].quantity
-      currPrices[portfolio[i].id] = {open, price}
+      currPrices[portfolio[i].id] = {open, price, company, change}
       portfolioValue += quantity * price
     }
     await this.setState({prices: currPrices, portfolioValue})
@@ -57,24 +60,65 @@ class Portfolio extends Component {
     const keys = Object.keys(this.state.prices)
     return this.props.portfolio.length ? (
       keys.length ? (
-        <div>
-          <h2>Portfolio: ${this.state.portfolioValue.toLocaleString('en')}</h2>
-          {this.props.portfolio.map(portfolio => {
-            const currentPrice = this.state.prices[portfolio.id].price
-            const totalPrice = currentPrice * portfolio.quantity
-            const openPrice = this.state.prices[portfolio.id].open
-            const color = this.getColor(openPrice, currentPrice)
-            return (
-              <h4 key={portfolio.id} className={color}>
-                {portfolio.stock.ticker} - {portfolio.quantity} - ${totalPrice.toLocaleString(
-                  'en'
-                )}
-              </h4>
-            )
-          })}
+        <div id="portfolio-page">
+          <div className="portfolio-heading">
+            <div className="portfolio-title">Portfolio:</div>
+            <div className="portfolio-amount">
+              ${this.state.portfolioValue.toLocaleString('en')}
+            </div>
+          </div>
+          <div id="portfolio-content">
+            <table id="portfolio-table">
+              <tbody>
+                <tr id="heading" className="border">
+                  <td className="td-portfolio">Symbol</td>
+                  <td className="td-portfolio">% Change</td>
+                  <td className="td-portfolio">Price</td>
+                  <td className="td-long">Owned Shares</td>
+                  <td className="td-long">Total Value</td>
+                </tr>
+                {this.props.portfolio.map(portfolio => {
+                  const stockData = this.state.prices[portfolio.id]
+                  const currPrice = stockData.price
+                  const totalValue = currPrice * portfolio.quantity
+                  const company = stockData.company
+                  const percentChange = stockData.change * 100
+                  const color = this.getColor(percentChange)
+                  return (
+                    // <div>
+                    <tr key={portfolio.id} className="border">
+                      <td className="tickerBox td-portfolio">
+                        <tr className="symbol bold">
+                          {portfolio.stock.ticker}
+                        </tr>
+                        <tr className="companyName">{company}</tr>
+                      </td>
+                      <td className={`${color} td-portfolio`}>
+                        {percentChange}%
+                      </td>
+                      <td className="price bold td-portfolio">{currPrice}</td>
+                      <td className="bold td-long">{portfolio.quantity}</td>
+                      <td className="bold td-long">
+                        ${totalValue.toLocaleString('en')}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+            <div className="trade-form-component">
+              <div className="trading ">
+                <div className="portfolio-title ">Trading:</div>
+                <div className="portfolio-amount">
+                  ${this.props.user.accountTotal.toLocaleString('en')}
+                </div>
+              </div>
+              <TradeForm />
+            </div>
+          </div>
         </div>
       ) : (
-        <h3>Loading...</h3>
+        <h3 className="loading">Loading...</h3>
       )
     ) : (
       <h3>You do not have any stocks in your portfolio</h3>

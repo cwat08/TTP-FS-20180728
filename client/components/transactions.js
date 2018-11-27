@@ -20,15 +20,24 @@ class Transactions extends Component {
   render() {
     return this.props.transactions && this.props.transactions.length ? (
       <div>
-        {this.props.transactions.map(transaction => {
-          return (
-            <h4 key={transaction.id}>
-              {' '}
-              BUY ({transaction.stock.ticker}) - {transaction.shareQuantity}{' '}
-              Shares @ ${transaction.price}
-            </h4>
-          )
-        })}
+        <table id="transactions-table">
+          <tbody>
+            <tr className="bold border">
+              <td id="transaction-title">Transaction History</td>
+            </tr>
+            {this.props.transactions.map(transaction => {
+              return (
+                <tr className="transaction" key={transaction.id}>
+                  <td>
+                    {' '}
+                    BUY ({transaction.stock.ticker}) -{' '}
+                    {transaction.shareQuantity} Shares @ ${transaction.price}
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
       </div>
     ) : (
       <h3>You do not have any transactions yet.</h3>

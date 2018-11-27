@@ -9,46 +9,46 @@ class TradeForm extends Component {
     this.state = {
       ticker: '',
       quantity: 0,
-      hasSubmitted: false
+      hasSubmitted: false,
+      quantityError: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.validateQuantity = this.validateQuantity.bind(this)
   }
 
   async handleChange(evt) {
     await this.setState({[evt.target.name]: evt.target.value})
   }
-
-  async validateForm() {
-    // if (Number.isInteger(this.state.quantity)) {
-    //   console.log('Please enter a whole integer')
-    // }
-    try {
-      const results = await axios.get(
-        `https://api.iextrading.com/1.0/stock/${this.state.ticker}/quote`
-      )
-      // if (results.status === 404) {
-      //   return {valid: false, message: 'Please enter a valid ticker symbol'}
-      // }
-      if (
-        results.data.iexRealtimePrice * this.state.quantity >
-        this.props.user.accountTotal
-      ) {
-        return {
-          valid: false,
-          message: 'You do not have enough funds for that transaction'
-        }
-      } else {
-        return {valid: true}
-      }
-    } catch (err) {
-      console.log(err.message)
-    }
+  // async validateTicker() {
+  //   try {
+  //   } catch (error) {
+  //     console.log(error.message)
+  //   }
+  // }
+  async validateQuantity() {
+    const results = await axios.get(
+      `https://api.iextrading.com/1.0/stock/${this.state.ticker}/quote`
+    )
+    if (!Number.isInteger(this.state.quantity)) {
+      this.setState({quantityError: 'Quantity must be a whole integer'})
+      return false
+    } else if (
+      //FIX THIS - IT LETS YOU BUY THINGS EVEN IF YOU DONT HAVE MONEY!!!
+      results.data.iexRealtimePrice * this.state.quantity >
+      this.props.user.accountTotal
+    ) {
+      this.setState({
+        quantityError: 'You do not have enough funds for that transaction'
+      })
+      return false
+    } else return true
   }
   async handleSubmit(evt) {
     evt.preventDefault()
-    const isValid = await this.validateForm()
-    if (isValid.valid) {
+    const validQuant = this.validateQuantity()
+    //add validation for ticker too!
+    if (validQuant) {
       await this.props.buyStock({
         ticker: this.state.ticker,
         quantity: this.state.quantity,
@@ -56,8 +56,6 @@ class TradeForm extends Component {
       })
       await this.props.me()
       this.setState({hasSubmitted: true, stock: this.props.stock})
-    } else {
-      console.log(isValid.message)
     }
   }
   render() {
@@ -69,15 +67,23 @@ class TradeForm extends Component {
         </h4>
       </div>
     ) : (
-      <div>
-        <h1>Buy some stock!</h1>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="ticker">Ticker Symbol: </label>
-          <input name="ticker" onChange={this.handleChange} />
-          <label htmlFor="quantity">Quantity: </label>
-          <input name="quantity" onChange={this.handleChange} />
-          <button type="submit">Submit</button>
-        </form>
+      <div id="trade-form">
+        <div id="trade-form-toggle">
+          <div className="toggle active-toggle">BUY</div>
+          <div className="toggle notActive">SELL</div>
+        </div>
+        <div>
+          <form onSubmit={this.handleSubmit}>
+            <label htmlFor="ticker">Symbol: </label>
+            <input name="ticker" onChange={this.handleChange} />
+            <label htmlFor="quantity">Quantity: </label>
+            <input name="quantity" onChange={this.handleChange} />
+            {this.state.quantityError.length ? (
+              <h4>{this.state.quantityError}</h4>
+            ) : null}
+            <button type="submit">Buy</button>
+          </form>
+        </div>
       </div>
     )
   }
