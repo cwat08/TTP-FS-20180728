@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
-import {buyStock} from '../store/stock'
+import {buyStock} from '../store/transactions'
+import {checkTicker} from '../store/validate'
 import {connect} from 'react-redux'
 import {me} from '../store/user'
 import axios from 'axios'
@@ -10,52 +11,72 @@ class TradeForm extends Component {
       ticker: '',
       quantity: 0,
       hasSubmitted: false,
-      quantityError: ''
+      quantityError: '',
+      tickerError: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.validateQuantity = this.validateQuantity.bind(this)
+    this.validateTicker = this.validateTicker.bind(this)
   }
 
   async handleChange(evt) {
     await this.setState({[evt.target.name]: evt.target.value})
   }
-  // async validateTicker() {
-  //   try {
-  //   } catch (error) {
-  //     console.log(error.message)
-  //   }
-  // }
+
   async validateQuantity() {
-    const results = await axios.get(
-      `https://api.iextrading.com/1.0/stock/${this.state.ticker}/quote`
-    )
-    if (!Number.isInteger(this.state.quantity)) {
+    if (!Number.isInteger(+this.state.quantity)) {
       this.setState({quantityError: 'Quantity must be a whole integer'})
       return false
-    } else if (
-      //FIX THIS - IT LETS YOU BUY THINGS EVEN IF YOU DONT HAVE MONEY!!!
-      results.data.iexRealtimePrice * this.state.quantity >
-      this.props.user.accountTotal
-    ) {
-      this.setState({
-        quantityError: 'You do not have enough funds for that transaction'
-      })
-      return false
-    } else return true
+    } else {
+      const results = await axios.get(
+        `https://api.iextrading.com/1.0/stock/${this.state.ticker}/quote`
+      )
+      const latestPrice = results.data.latestPrice
+      const quantity = this.state.quantity
+      const userAccountTotal = +this.props.user.accountTotal
+
+      if (latestPrice * quantity > userAccountTotal) {
+        this.setState({
+          quantityError: 'You do not have enough funds for that transaction'
+        })
+        return false
+      }
+    }
+    return true
   }
+
+  async validateTicker() {
+    try {
+      const results = await axios.get(`/api/validate/${this.state.ticker}`)
+      if (results.data === null) {
+        await this.setState({tickerError: 'Please enter a valid ticker symbol'})
+        return false
+      } else {
+        return true
+      }
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+
   async handleSubmit(evt) {
     evt.preventDefault()
-    const validQuant = this.validateQuantity()
-    //add validation for ticker too!
-    if (validQuant) {
-      await this.props.buyStock({
-        ticker: this.state.ticker,
-        quantity: this.state.quantity,
-        userId: this.props.user.id
-      })
-      await this.props.me()
-      this.setState({hasSubmitted: true, stock: this.props.stock})
+    this.setState({quantityError: '', tickerError: ''})
+    const validTicker = await this.validateTicker()
+    if (validTicker === false) {
+      return false
+    } else {
+      const validQuant = await this.validateQuantity()
+      if (validQuant === true) {
+        await this.props.buyStock({
+          ticker: this.state.ticker,
+          quantity: this.state.quantity,
+          userId: this.props.user.id
+        })
+        await this.props.me()
+        this.setState({hasSubmitted: true, stock: this.props.stock})
+      }
     }
   }
   render() {
@@ -75,13 +96,15 @@ class TradeForm extends Component {
         <div>
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="ticker">Symbol: </label>
-            <input name="ticker" onChange={this.handleChange} />
+            <input name="ticker" onChange={this.handleChange} />{' '}
+            {this.state.tickerError.length ? (
+              <h4>{this.state.tickerError}</h4>
+            ) : null}
             <label htmlFor="quantity">Quantity: </label>
             <input name="quantity" onChange={this.handleChange} />
             {this.state.quantityError.length ? (
               <h4>{this.state.quantityError}</h4>
             ) : null}
-
             <div id="stock-preview">
               {/* add logic to only show preview on key up when both field are filled out AND valid*/}
               <div className="portfolio-title  purchase-preview">
@@ -104,7 +127,8 @@ const mapState = state => ({
 const mapDispatch = dispatch => {
   return {
     buyStock: stock => dispatch(buyStock(stock)),
-    me: () => dispatch(me())
+    me: () => dispatch(me()),
+    checkTicker: ticker => dispatch(checkTicker(ticker))
   }
 }
 

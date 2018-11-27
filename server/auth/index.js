@@ -21,9 +21,7 @@ router.post('/login', async (req, res, next) => {
 
 router.post('/signup', async (req, res, next) => {
   try {
-    console.log('NAME' + req.body.name)
     const user = await User.create(req.body)
-    console.log('USER' + user)
     req.login(user, err => (err ? next(err) : res.json(user)))
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
@@ -35,8 +33,6 @@ router.post('/signup', async (req, res, next) => {
 })
 
 router.post('/logout', async (req, res) => {
-  console.log('*********')
-  console.dir(req.logout)
   await req.logout()
   await req.session.destroy()
   res.redirect('/')
@@ -45,5 +41,3 @@ router.post('/logout', async (req, res) => {
 router.get('/me', (req, res) => {
   res.json(req.user)
 })
-
-router.use('/google', require('./google'))

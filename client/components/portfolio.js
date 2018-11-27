@@ -19,7 +19,6 @@ class Portfolio extends Component {
   }
   async componentDidMount() {
     await this.props.fetchPortfolio(this.props.user.id)
-
     this.realTimePrices()
   }
   realTimePrices() {
@@ -93,7 +92,7 @@ class Portfolio extends Component {
                           // <div>
                           <tr key={portfolio.id} className="border">
                             <td className="tickerBox td-portfolio">
-                              <tr className="symbol bold">
+                              <tr className={`${color} symbol bold`}>
                                 {portfolio.stock.ticker}
                               </tr>
                               <tr className="companyName">{company}</tr>
@@ -101,13 +100,13 @@ class Portfolio extends Component {
                             <td className={`${color} td-portfolio`}>
                               {percentChange.toFixed(2)}%
                             </td>
-                            <td className="price bold td-portfolio">
+                            <td className={`${color} price bold td-portfolio`}>
                               {currPrice.toFixed(2)}
                             </td>
                             <td className="bold td-long">
                               {portfolio.quantity}
                             </td>
-                            <td className="bold td-long">
+                            <td className={`${color} bold td-long`}>
                               ${totalValue.toLocaleString('en')}
                             </td>
                           </tr>

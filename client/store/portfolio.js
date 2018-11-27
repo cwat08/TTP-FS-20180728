@@ -22,7 +22,7 @@ const getPortfolio = portfolio => ({type: GET_PORTFOLIO, portfolio})
  */
 export const fetchPortfolio = id => async dispatch => {
   try {
-    const res = await axios.get(`/api/stock/portfolio/${id}`)
+    const res = await axios.get(`/api/portfolio/${id}`)
     const portfolio = res.data
     // const withCurrPrice = await portfolio.map(async port => {
     //   const results = await `https://api.iextrading.com/1.0/stock/${
