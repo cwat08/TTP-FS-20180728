@@ -56,9 +56,9 @@ table {
 }
 
 #transactions-table {
-  margin: 30px 0 0 30px;
+  margin: 30px 0 0 90px;
 }
-#heading {
+.heading {
   font-size: 10pt;
 }
 
@@ -97,8 +97,8 @@ label {
 }
 
 button {
-  height: 34px;
-  width: 412px;
+  height: 40px;
+  width: 150px;
   border-radius: 5px;
   outline: 0;
   cursor: pointer;
@@ -157,6 +157,7 @@ form {
   border-bottom: 1px solid #d3d3d3;
   height: 30px;
   padding: 2px;
+  font-weight: bold;
 }
 
 #transaction-title {
@@ -164,7 +165,11 @@ form {
 }
 
 #app-title {
-  margin-left: 15px;
+  margin-left: 88px;
+  font-size: 12pt;
+  padding: 7px;
+  letter-spacing: 0.2em;
+  border: 1px solid #363c47;
 }
 
 .td-long {
@@ -216,10 +221,11 @@ form {
 #nav-bar {
   width: 100%;
   background-color: white;
+  padding: 2px;
 }
 .nav-links {
   display: flex;
-  margin-right: 20px;
+  margin-right: 80px;
 }
 
 .loading {
@@ -270,4 +276,14 @@ form {
 .auth-title {
   text-align: center;
   padding-top: 0;
+}
+
+.page-header {
+  margin: 35px 20px 35px 90px;
+  font-size: 25pt;
+  font-weight: 100;
+}
+
+hr {
+  width: 87%;
 }

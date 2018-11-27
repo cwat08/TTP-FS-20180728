@@ -5,34 +5,45 @@ import {connect} from 'react-redux'
 class Transactions extends Component {
   constructor() {
     super()
-    this.state = {
-      transactions: []
-    }
+    // this.state = {
+    //   transactions: []
+    // }
+    this.convertDate = this.convertDate.bind(this)
   }
 
   async componentDidMount() {
     const transactions = await this.props.fetchTransactions(this.props.user.id)
-    await this.setState({transactions})
-    console.log('************')
-    console.log(this.state)
+    //await this.setState({transactions})
+  }
+
+  convertDate(time) {
+    const date = time.slice(0, time.indexOf('T')).split('-')
+    const newDate = `${date[1]}/${date[2]}/${date[0]}`
+    return newDate
   }
 
   render() {
     return this.props.transactions && this.props.transactions.length ? (
       <div>
+        <h3 className="page-header">Transaction History</h3>
+        <hr />
         <table id="transactions-table">
           <tbody>
-            <tr className="bold border">
-              <td id="transaction-title">Transaction History</td>
+            <tr className="heading border">
+              <td className="td-portfolio">Transaction</td>
+              <td className="td-portfolio">Symbol</td>
+              <td className="td-portfolio">Quantity</td>
+              <td className="td-portfolio">Price</td>
+              <td className="td-long">Date</td>
             </tr>
             {this.props.transactions.map(transaction => {
               return (
                 <tr className="transaction" key={transaction.id}>
-                  <td>
-                    {' '}
-                    BUY ({transaction.stock.ticker}) -{' '}
-                    {transaction.shareQuantity} Shares @ ${transaction.price}
-                  </td>
+                  <td>{transaction.transactionType.toUpperCase()}</td>
+                  <td> {transaction.stock.ticker}</td>
+                  <td> {transaction.shareQuantity.toLocaleString('en')}</td>
+                  <td>{transaction.price}</td>
+                  <td> {this.convertDate(transaction.createdAt)}</td>
                 </tr>
               )
             })}
