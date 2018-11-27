@@ -9,7 +9,7 @@ class Transactions extends Component {
   }
 
   async componentDidMount() {
-    const transactions = await this.props.fetchTransactions(this.props.user.id)
+    await this.props.fetchTransactions(this.props.user.id)
   }
 
   convertDate(time) {

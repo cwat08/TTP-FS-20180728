@@ -21,8 +21,6 @@ const loadTransactions = transactions => ({
   transactions
 })
 
-//const addStock = stock => ({type: ADD_STOCK, stock})
-
 /**
  * THUNK CREATORS
  */

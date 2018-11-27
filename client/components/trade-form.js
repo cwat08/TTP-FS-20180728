@@ -94,21 +94,25 @@ class TradeForm extends Component {
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="ticker">Symbol: </label>
             <input
+              className={this.state.tickerError.length ? 'error-border' : null}
               name="ticker"
               onChange={this.handleChange}
               value={this.state.ticker}
             />{' '}
             {this.state.tickerError.length ? (
-              <h4>{this.state.tickerError}</h4>
+              <h4 className="error">{this.state.tickerError}</h4>
             ) : null}
             <label htmlFor="quantity">Quantity: </label>
             <input
+              className={
+                this.state.quantityError.length ? 'error-border' : null
+              }
               name="quantity"
               onChange={this.handleChange}
               value={this.state.quantity}
             />
             {this.state.quantityError.length ? (
-              <h4>{this.state.quantityError}</h4>
+              <h4 className="error">{this.state.quantityError}</h4>
             ) : null}
             <div id="stock-preview">
               {/* add logic to only show preview on key up when both field are filled out AND valid*/}

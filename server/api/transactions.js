@@ -31,9 +31,6 @@ router.post('/buy', async (req, res, next) => {
     const company = data.companyName
     const openingPrice = data.open
     let stock = await Stock.findOne({where: {ticker: symbol}})
-    if (!stock) {
-      stock = await Stock.create({ticker: symbol})
-    }
     const user = await User.findById(userId)
     const newTransaction = await Transaction.create({
       shareQuantity: quantity,
@@ -63,9 +60,6 @@ router.post('/buy', async (req, res, next) => {
     }
     const transactionTotal = quantity * (currentPrice || openingPrice)
     const newAccountTotal = user.accountTotal - transactionTotal
-    const fullTransaction = await Transaction.findById(newTransaction.id, {
-      include: [{model: Stock}]
-    })
     await user.update({
       accountTotal: newAccountTotal
     })
@@ -78,6 +72,3 @@ router.post('/buy', async (req, res, next) => {
     console.log(err.message)
   }
 })
-
-//post buy
-//post sell
